@@ -1,10 +1,12 @@
 // import 'dart:io';
 
+import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/home.dart';
 import 'package:ayib/Screens/otp_verify.dart';
 import 'package:ayib/Screens/sign_in.dart';
 import 'package:ayib/Screens/sign_up.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 // import 'package:flutter/services.dart';
 
 void main() {
@@ -15,7 +17,13 @@ void main() {
   // SecurityContext.defaultContext
   //     .setTrustedCertificatesBytes(data.buffer.asUint8List());
 
-  runApp(const MyApp());
+  runApp(
+    StoreProvider(
+      store: store,
+      child: const MyApp(),
+    ),
+  );
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

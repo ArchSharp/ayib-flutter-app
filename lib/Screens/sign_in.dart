@@ -1,5 +1,8 @@
 import 'package:ayib/API/auths_functions.dart';
+import 'package:ayib/ReduxState/actions.dart';
+import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/home.dart';
+import 'package:ayib/Screens/otp_verify.dart';
 import 'package:ayib/Screens/sign_up.dart';
 import 'package:ayib/Screens/my_notification_bar.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +24,7 @@ class _SignInState extends State<SignIn> {
   bool revealPassword = false;
   String errorText = '';
   bool isLoading = false;
-  late Tuple2<bool, String> result;
+  late Tuple2<int, String> result;
 
   Future<void> handleSignIn() async {
     setState(() {
@@ -29,10 +32,11 @@ class _SignInState extends State<SignIn> {
     });
 
     try {
-      Tuple2<bool, String> result = await signinFn(email, password);
+      store.dispatch(InitialiseEmail(email));
+      Tuple2<int, String> result = await signinFn(email, password);
 
       if (_formKey.currentState?.validate() ?? false) {
-        if (result.item1) {
+        if (result.item1 == 1) {
           if (context.mounted) {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => Home()));
@@ -40,11 +44,14 @@ class _SignInState extends State<SignIn> {
           }
         } else {
           if (context.mounted) {
-            myNotificationBar(context, result.item2, "error");
+            if (result.item1 == 2) {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => OTPScreen()));
+              myNotificationBar(context, result.item2, "error");
+            } else {
+              myNotificationBar(context, result.item2, "error");
+            }
           }
-          setState(() {
-            errorText = result.item2;
-          });
         }
       }
     } finally {

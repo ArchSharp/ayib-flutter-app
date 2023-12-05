@@ -1,4 +1,8 @@
+import 'package:ayib/API/auths_functions.dart';
+import 'package:ayib/Screens/home.dart';
+import 'package:ayib/Screens/my_notification_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:tuple/tuple.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
@@ -11,6 +15,8 @@ class OTPScreen extends StatefulWidget {
 class _OTPScreenState extends State<OTPScreen> {
   late List<TextEditingController> controllers;
   int currentIndex = 0;
+  bool isLoading = false;
+  bool resendOtp = false;
 
   @override
   void initState() {
@@ -45,7 +51,7 @@ class _OTPScreenState extends State<OTPScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: verifyOTP,
-              child: const Text('Verify OTP'),
+              child: Text(resendOtp == false ? 'Verify OTP' : 'Resend OTP'),
             ),
           ],
         ),
@@ -89,9 +95,36 @@ class _OTPScreenState extends State<OTPScreen> {
     );
   }
 
-  void verifyOTP() {
+  Future<void> verifyOTP() async {
     String otp = controllers.map((controller) => controller.text).join();
     // Implement your OTP verification logic here
     print('Verifying OTP: $otp');
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      Tuple2<int, String> result =
+          await verifyEmailFn("archraphr@gmail.com", otp);
+      if (context.mounted) {
+        if (result.item1 == 1) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Home()));
+          myNotificationBar(context, result.item2, "success");
+        } else if (result.item1 == 2) {
+          setState(() {
+            resendOtp = true;
+          });
+          myNotificationBar(context, result.item2, "error");
+        } else {
+          myNotificationBar(context, result.item2, "error");
+        }
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 }

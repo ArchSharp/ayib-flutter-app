@@ -22,34 +22,45 @@ class _SignUpState extends State<SignUp> {
   bool revealPassword = false;
   bool isButtonClicked = false;
   String errorText = '';
+  bool isLoading = false;
+  late Tuple2<bool, String> result;
 
   Future<void> handleSignUp() async {
-    // Simulate sign-up logic
+    setState(() {
+      isLoading = true;
+    });
 
-    Tuple2<bool, String> result = await signupFn(email, phoneNumber, password);
-    if (_formKey.currentState?.validate() ?? false) {
-      if (result.item1 == true) {
-        if (context.mounted) {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => OTPScreen()));
-          myNotificationBar(context, result.item2, "success");
-        }
-        setState(() {
-          isButtonClicked = true;
-          errorText = '';
-        });
+    try {
+      Tuple2<bool, String> result =
+          await signupFn(email, phoneNumber, password);
+      if (_formKey.currentState?.validate() ?? false) {
+        if (result.item1 == true) {
+          if (context.mounted) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => OTPScreen()));
+            myNotificationBar(context, result.item2, "success");
+          }
+          setState(() {
+            isButtonClicked = true;
+            errorText = '';
+          });
 
-        // You might want to navigate to another screen or perform user registration
-      } else {
-        // Failed sign-up
-        if (context.mounted) {
-          myNotificationBar(context, result.item2, "error");
+          // You might want to navigate to another screen or perform user registration
+        } else {
+          // Failed sign-up
+          if (context.mounted) {
+            myNotificationBar(context, result.item2, "error");
+          }
+          setState(() {
+            isButtonClicked = true;
+            errorText = result.item2;
+          });
         }
-        setState(() {
-          isButtonClicked = true;
-          errorText = result.item2;
-        });
       }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -155,9 +166,21 @@ class _SignUpState extends State<SignUp> {
                           ? Colors.blue
                           : const Color(0xFF049DFE),
                       fixedSize: Size.fromWidth(deviceWidth)),
-                  child: const Text(
-                    'Sign Up',
-                    style: TextStyle(color: Colors.white),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      const Text(
+                        'Sign Up',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      if (isLoading)
+                        const Positioned.fill(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
