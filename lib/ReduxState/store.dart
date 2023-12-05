@@ -1,4 +1,4 @@
-import 'package:ayib/ReduxState/userReducers.dart';
+import 'package:ayib/ReduxState/user_reducers.dart';
 import 'package:redux/redux.dart';
 
 class AppState {
@@ -14,8 +14,5 @@ final combinedReducers = combineReducers<AppState>([userReducer]);
 // Create the Redux store
 final Store<AppState> store = Store<AppState>(
   combinedReducers,
-  initialState: AppState(
-    email: '',
-    user: {},
-  ),
+  initialState: AppState(email: '', user: {}),
 );

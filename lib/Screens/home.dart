@@ -1,3 +1,4 @@
+import 'package:ayib/API/auths_functions.dart';
 import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/sign_in.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class _HomeState extends State<Home> {
               Text('Welcome, $fname $lname!'), //${user['lastname']}
               ElevatedButton(
                   onPressed: () {
+                    logoutFn();
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => SignIn()));
                   },

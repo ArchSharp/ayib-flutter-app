@@ -4,7 +4,7 @@ import 'package:ayib/ReduxState/store.dart';
 import 'package:http/http.dart' as http;
 import 'package:tuple/tuple.dart';
 
-String baseUrl = "https://d6df-102-88-35-131.ngrok-free.app";
+String baseUrl = "https://2e21-102-88-34-62.ngrok-free.app";
 
 Future<Tuple2<int, String>> signinFn(email, pass) async {
   String apiUrl = '$baseUrl/api/SigninUser';
@@ -49,7 +49,8 @@ Future<Tuple2<int, String>> signinFn(email, pass) async {
   return result;
 }
 
-Future<Tuple2<bool, String>> signupFn(email, phone, pass) async {
+Future<Tuple2<int, String>> signupFn(
+    email, phone, pass, fname, lname, mname, dateofbirth) async {
   String apiUrl = '$baseUrl/api/NewUser';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
@@ -59,14 +60,15 @@ Future<Tuple2<bool, String>> signupFn(email, phone, pass) async {
   final Map<String, dynamic> payload = {
     "email": email,
     "password": pass,
-    "date_of_birth": "1990-02-16T00:00:00+00:00",
-    "firstname": "Raphael",
-    "lastname": "Adetunji",
-    "middle_name": "Alade",
+    "date_of_birth": dateofbirth + "T00:00:00+00:00",
+    "firstname": fname,
+    "lastname": lname,
+    "middle_name": mname,
     "phone_number": phone
   };
+  // print(payload);
 
-  var result = const Tuple2(false, "");
+  var result = const Tuple2(0, "");
   try {
     final response = await http.post(Uri.parse(apiUrl),
         headers: headers, body: json.encode(payload));
@@ -74,17 +76,21 @@ Future<Tuple2<bool, String>> signupFn(email, phone, pass) async {
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 201) {
       // print(data);
-      result = const Tuple2(true, "Account created succesfully");
+      result = const Tuple2(1, "Account created succesfully");
     } else {
       // Handle errors
-      print('Request failed with status: ${response.statusCode}');
-      // print(response.body);
-      result = Tuple2(false, data['body']);
+      // print('Request failed with status: ${response.statusCode}');
+      // print('check error: $data');
+      if (data['error'].toString().contains("parsing time")) {
+        result = const Tuple2(2, 'There is error in date');
+      } else {
+        result = Tuple2(3, data['body']);
+      }
     }
   } catch (e) {
     // Handle exceptions
-    print('Error: $e');
-    result = const Tuple2(false, "Network error");
+    // print('Error: $e');
+    result = const Tuple2(-1, "Network error");
   }
   return result;
 }
@@ -123,4 +129,12 @@ Future<Tuple2<int, String>> verifyEmailFn(email, otp) async {
     result = const Tuple2(-1, "Network error");
   }
   return result;
+}
+
+void logoutFn() {
+  try {
+    store.dispatch(LogOut());
+  } catch (e) {
+    print('Error: $e');
+  }
 }

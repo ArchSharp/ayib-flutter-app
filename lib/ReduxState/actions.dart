@@ -9,3 +9,7 @@ class InitialiseEmail {
 
   InitialiseEmail(this.email);
 }
+
+class LogOut {
+  LogOut();
+}

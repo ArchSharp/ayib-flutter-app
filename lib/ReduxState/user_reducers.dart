@@ -9,5 +9,9 @@ AppState userReducer(AppState state, dynamic action) {
     return state..email = action.email;
   }
 
+  if (action is LogOut) {
+    return AppState(email: "", user: {});
+  }
+
   return state;
 }

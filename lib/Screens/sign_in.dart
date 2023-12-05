@@ -39,14 +39,14 @@ class _SignInState extends State<SignIn> {
         if (result.item1 == 1) {
           if (context.mounted) {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Home()));
+                context, MaterialPageRoute(builder: (context) => const Home()));
             myNotificationBar(context, result.item2, "success");
           }
         } else {
           if (context.mounted) {
             if (result.item1 == 2) {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => OTPScreen()));
+                  MaterialPageRoute(builder: (context) => const OTPScreen()));
               myNotificationBar(context, result.item2, "error");
             } else {
               myNotificationBar(context, result.item2, "error");

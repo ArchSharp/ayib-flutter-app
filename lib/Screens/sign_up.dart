@@ -18,14 +18,18 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String email = '';
+  String firstname = '';
+  String lastname = '';
+  String mname = '';
   String password = '';
+  String dateofbirth = '';
   String phoneNumber = "";
 
   bool revealPassword = false;
   bool isButtonClicked = false;
   String errorText = '';
   bool isLoading = false;
-  late Tuple2<bool, String> result;
+  late Tuple2<int, String> result;
 
   Future<void> handleSignUp() async {
     setState(() {
@@ -34,10 +38,10 @@ class _SignUpState extends State<SignUp> {
 
     try {
       store.dispatch(InitialiseEmail(email));
-      Tuple2<bool, String> result =
-          await signupFn(email, phoneNumber, password);
+      Tuple2<int, String> result = await signupFn(email, phoneNumber, password,
+          firstname, lastname, mname, dateofbirth);
       if (_formKey.currentState?.validate() ?? false) {
-        if (result.item1 == true) {
+        if (result.item1 == 1) {
           if (context.mounted) {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => OTPScreen()));
@@ -72,7 +76,7 @@ class _SignUpState extends State<SignUp> {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     double imageWidth = deviceWidth * 0.8;
-    double mtop = deviceHeight * 0.07;
+    double mtop = deviceHeight * 0.03;
 
     return Scaffold(
       // appBar: AppBar(
@@ -89,6 +93,54 @@ class _SignUpState extends State<SignUp> {
                 SizedBox(height: mtop),
                 Image.asset('assets/images/Ayib.jpg',
                     width: imageWidth, height: 250),
+                const SizedBox(height: 2),
+                TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      lastname = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your last name';
+                    }
+                    // Add more validation rules if needed
+                    return null;
+                  },
+                  decoration: const InputDecoration(labelText: 'Last name'),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      firstname = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your first name';
+                    }
+                    // Add more validation rules if needed
+                    return null;
+                  },
+                  decoration: const InputDecoration(labelText: 'First name'),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      mname = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your last name';
+                    }
+                    // Add more validation rules if needed
+                    return null;
+                  },
+                  decoration: const InputDecoration(labelText: 'Middle name'),
+                ),
                 const SizedBox(height: 8),
                 TextFormField(
                   onChanged: (value) {
@@ -103,9 +155,32 @@ class _SignUpState extends State<SignUp> {
                     // Add more validation rules if needed
                     return null;
                   },
-                  decoration: InputDecoration(labelText: 'Email'),
+                  decoration: const InputDecoration(labelText: 'Email'),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
+                TextFormField(
+                  keyboardType: TextInputType.datetime,
+                  onChanged: (value) {
+                    setState(() {
+                      dateofbirth = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your date of birth';
+                    }
+                    // You can add more specific validation rules for date of birth here
+                    // For example, you might want to check if it's a valid date format.
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Date of Birth',
+                    hintText: 'YYYY-MM-DD',
+                    // border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.calendar_today),
+                  ),
+                ),
+                const SizedBox(height: 8),
                 TextFormField(
                   onChanged: (value) {
                     setState(() {
@@ -127,7 +202,7 @@ class _SignUpState extends State<SignUp> {
                         .phone), // Add an icon to the left of the input field
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 TextFormField(
                   onChanged: (value) {
                     setState(() {
@@ -158,17 +233,17 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () {
                     // Handle sign-up logic
                     handleSignUp();
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: isButtonClicked
-                          ? Colors.blue
-                          : const Color(0xFF049DFE),
-                      fixedSize: Size.fromWidth(deviceWidth)),
+                    backgroundColor:
+                        isButtonClicked ? Colors.blue : const Color(0xFF049DFE),
+                    fixedSize: Size.fromWidth(deviceWidth),
+                  ),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -186,7 +261,7 @@ class _SignUpState extends State<SignUp> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 // if (errorText.isNotEmpty)
                 //   Text(
                 //     errorText,
