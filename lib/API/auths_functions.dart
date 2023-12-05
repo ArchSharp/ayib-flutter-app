@@ -37,6 +37,8 @@ Future<Tuple2<int, String>> signinFn(email, pass) async {
         result = Tuple2(2, data['body']);
       } else if (msg.toLowerCase() == "incorrect password detected") {
         result = Tuple2(3, data['body']);
+      } else if (msg.toLowerCase() == "user not found") {
+        result = Tuple2(4, data['body']);
       }
     }
   } catch (e) {

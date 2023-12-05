@@ -1,4 +1,6 @@
 import 'package:ayib/API/auths_functions.dart';
+import 'package:ayib/ReduxState/actions.dart';
+import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/otp_verify.dart';
 import 'package:ayib/Screens/sign_in.dart';
 import 'package:ayib/Screens/my_notification_bar.dart';
@@ -31,6 +33,7 @@ class _SignUpState extends State<SignUp> {
     });
 
     try {
+      store.dispatch(InitialiseEmail(email));
       Tuple2<bool, String> result =
           await signupFn(email, phoneNumber, password);
       if (_formKey.currentState?.validate() ?? false) {

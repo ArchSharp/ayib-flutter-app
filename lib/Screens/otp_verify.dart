@@ -1,6 +1,7 @@
 import 'package:ayib/API/auths_functions.dart';
-import 'package:ayib/Screens/home.dart';
+import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/my_notification_bar.dart';
+import 'package:ayib/Screens/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
@@ -105,12 +106,13 @@ class _OTPScreenState extends State<OTPScreen> {
     });
 
     try {
-      Tuple2<int, String> result =
-          await verifyEmailFn("archraphr@gmail.com", otp);
+      var email = store.state.email;
+      print(email);
+      Tuple2<int, String> result = await verifyEmailFn(email, otp);
       if (context.mounted) {
         if (result.item1 == 1) {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Home()));
+              context, MaterialPageRoute(builder: (context) => SignIn()));
           myNotificationBar(context, result.item2, "success");
         } else if (result.item1 == 2) {
           setState(() {

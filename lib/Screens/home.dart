@@ -17,8 +17,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: StoreConnector<AppState, dynamic>(
         converter: (store) => store, //store.state.user
-        builder: (context, state) {
-          //user
+        builder: (context, state /*user*/) {
           var fname = store.state.user['firstname'];
           var lname = store.state.user['lastname'];
           return SafeArea(
