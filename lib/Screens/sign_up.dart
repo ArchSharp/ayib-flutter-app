@@ -44,7 +44,7 @@ class _SignUpState extends State<SignUp> {
         if (result.item1 == 1) {
           if (context.mounted) {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => OTPScreen()));
+                context, MaterialPageRoute(builder: (context) => const OTPScreen()));
             myNotificationBar(context, result.item2, "success");
           }
           setState(() {

@@ -6,6 +6,7 @@ import 'package:ayib/Screens/otp_verify.dart';
 import 'package:ayib/Screens/sign_in.dart';
 import 'package:ayib/Screens/sign_up.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 // import 'package:flutter/services.dart';
 
@@ -31,6 +32,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.white, // Change this to the desired color
+      statusBarIconBrightness:
+          Brightness.dark, // Change the icon color (dark or light)
+    ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const LoadingScreen(),
@@ -45,6 +51,7 @@ class MyApp extends StatelessWidget {
 }
 
 class LoadingScreen extends StatefulWidget {
+  @override
   final Key? key; // Add a named 'key' parameter
 
   const LoadingScreen({this.key}) : super(key: key);
@@ -62,7 +69,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Future.delayed(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => SignIn()),
+        MaterialPageRoute(builder: (context) => const SignIn()),
       );
     });
 
