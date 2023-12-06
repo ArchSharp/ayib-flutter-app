@@ -1,6 +1,7 @@
 // import 'dart:io';
 
 import 'package:ayib/ReduxState/store.dart';
+import 'package:ayib/Screens/app_loading.dart';
 import 'package:ayib/Screens/home.dart';
 import 'package:ayib/Screens/otp_verify.dart';
 import 'package:ayib/Screens/sign_in.dart';
@@ -46,54 +47,6 @@ class MyApp extends StatelessWidget {
         OTPScreen.routeName: (ctx) => const OTPScreen(),
         Home.routeName: (ctx) => const Home(),
       },
-    );
-  }
-}
-
-class LoadingScreen extends StatefulWidget {
-  @override
-  final Key? key; // Add a named 'key' parameter
-
-  const LoadingScreen({this.key}) : super(key: key);
-
-  @override
-  _LoadingScreenState createState() => _LoadingScreenState();
-}
-
-class _LoadingScreenState extends State<LoadingScreen> {
-  @override
-  void initState() {
-    // You can perform any initialization tasks here
-
-    // Example: Delay for 3 seconds and then navigate to the next screen
-    Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const SignIn()),
-      );
-    });
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double deviceWidth = MediaQuery.of(context).size.width;
-    double imageWidth = deviceWidth * 0.8;
-
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/Ayib.jpg',
-                width: imageWidth, height: 250),
-            const CircularProgressIndicator(),
-            const SizedBox(height: 16),
-            const Text('Loading...'),
-          ],
-        ),
-      ),
     );
   }
 }

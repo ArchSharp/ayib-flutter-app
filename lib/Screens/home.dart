@@ -40,10 +40,11 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    // double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     // double imageWidth = deviceWidth * 0.8;
     double height = deviceHeight * 0.2;
+    double width = deviceWidth * 0.9;
 
     return Scaffold(
       body: GestureDetector(
@@ -59,7 +60,7 @@ class _HomeState extends State<Home> {
           converter: (store) => store, //store.state.user
           builder: (context, state /*user*/) {
             var fname = store.state.user['firstname'];
-            var lname = store.state.user['lastname'];
+            // var lname = store.state.user['lastname'];
             return Column(
               children: [
                 Stack(
@@ -73,10 +74,11 @@ class _HomeState extends State<Home> {
                     Positioned(
                       // top: 50.0,
                       bottom: -height / 2,
-                      left: 16.0,
-                      right: 16.0,
+                      left: 15,
+                      right: 15,
                       height: height * 1.2,
                       child: Container(
+                        width: width,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
@@ -128,9 +130,8 @@ class _HomeState extends State<Home> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: height / 4),
+                              SizedBox(height: height / 3.5),
                               //balance
-
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -164,16 +165,16 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-
-                // Container(
-                //   height: height,
-                //   decoration: BoxDecoration(
-                //     border: Border.all(
-                //       color: Colors.orangeAccent.shade700,
-                //       width: 2.0,
-                //     ),
-                //   ),
-                // ),
+                SizedBox(height: height / 2 + 5),
+                Container(
+                  height: height,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.orangeAccent.shade700,
+                      width: 2.0,
+                    ),
+                  ),
+                ),
               ],
             );
           },
