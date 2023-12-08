@@ -1,26 +1,23 @@
 import 'package:ayib/API/auths_functions.dart';
-import 'package:ayib/ReduxState/actions.dart';
-import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/forgot_password.dart';
-import 'package:ayib/Screens/home.dart';
 import 'package:ayib/Screens/otp_verify.dart';
-import 'package:ayib/Screens/sign_up.dart';
 import 'package:ayib/Screens/my_notification_bar.dart';
+import 'package:ayib/Screens/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+class ResetPassword extends StatefulWidget {
+  const ResetPassword({super.key});
   static const routeName = '/signin';
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<ResetPassword> createState() => _SignInState();
 }
 
-class _SignInState extends State<SignIn> {
+class _SignInState extends State<ResetPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String email = '';
-  String password = '';
+  String otp = '';
+  String newPassword = '';
   bool isButtonClicked = false;
   bool revealPassword = false;
   String errorText = '';
@@ -33,21 +30,24 @@ class _SignInState extends State<SignIn> {
     });
 
     try {
-      store.dispatch(InitialiseEmail(email));
-      Tuple2<int, String> result = await signinFn(email, password);
+      Tuple2<int, String> result = await resetPasswordFn(otp, newPassword);
 
       if (_formKey.currentState?.validate() ?? false) {
-        if (result.item1 == 1) {
-          if (context.mounted) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => const Home()));
+        if (context.mounted) {
+          if (result.item1 == 1) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const SignIn()));
             myNotificationBar(context, result.item2, "success");
-          }
-        } else {
-          if (context.mounted) {
-            if (result.item1 == 2) {
+          } else {
+            if (result.item1 == 3) {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const OTPScreen()));
+              myNotificationBar(context, result.item2, "error");
+            } else if (result.item1 == 5) {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ForgotPassword()));
               myNotificationBar(context, result.item2, "error");
             } else {
               myNotificationBar(context, result.item2, "error");
@@ -88,35 +88,36 @@ class _SignInState extends State<SignIn> {
                 TextFormField(
                   onChanged: (value) {
                     setState(() {
-                      email = value;
+                      otp = value;
                     });
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Please enter your otp';
                     }
                     // Add more validation rules if needed
                     return null;
                   },
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'OTP'),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   onChanged: (value) {
                     setState(() {
-                      password = value;
+                      newPassword = value;
                     });
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
+                      return 'Please enter your new password';
                     }
                     // Add more validation rules if needed
                     return null;
                   },
                   obscureText: !revealPassword,
                   decoration: InputDecoration(
-                    labelText: 'Password',
+                    labelText: 'New password',
                     suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -132,24 +133,6 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                            ForgotPassword.routeName,
-                            arguments: 'Passing data from SignIn');
-                      },
-                      child: const Text(
-                        "Forgot password?",
-                        style: TextStyle(
-                          color: Color(0xFF049DFE),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
                 ElevatedButton(
                   onPressed: () {
                     handleSignIn();
@@ -164,7 +147,7 @@ class _SignInState extends State<SignIn> {
                     alignment: Alignment.center,
                     children: [
                       const Text(
-                        'Sign In',
+                        'Reset password',
                         style: TextStyle(color: Colors.white),
                       ),
                       if (isLoading)
@@ -177,31 +160,12 @@ class _SignInState extends State<SignIn> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
                 // if (errorText.isNotEmpty)
                 //   Text(
                 //     errorText,
                 //     style: const TextStyle(color: Colors.red),
                 //   ),
                 // const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text('Don\'t have an account?'),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(SignUp.routeName,
-                            arguments: 'Passing data from SignIn');
-                      },
-                      child: const Text(
-                        "Sign up",
-                        style: TextStyle(
-                          color: Color(0xFF049DFE),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),

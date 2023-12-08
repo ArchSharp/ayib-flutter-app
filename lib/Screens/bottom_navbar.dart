@@ -27,14 +27,14 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.favorite,
+            Icons.qr_code_scanner_outlined,
             color: _currentIndex == 1 ? const Color(0xFF049DFE) : Colors.grey,
           ),
           label: 'Scan & pay',
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.settings,
+            Icons.sync_alt_rounded,
             color: _currentIndex == 2 ? const Color(0xFF049DFE) : Colors.grey,
           ),
           label: 'Transfer',

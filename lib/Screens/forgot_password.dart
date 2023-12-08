@@ -1,51 +1,51 @@
 import 'package:ayib/API/auths_functions.dart';
 import 'package:ayib/ReduxState/actions.dart';
 import 'package:ayib/ReduxState/store.dart';
-import 'package:ayib/Screens/forgot_password.dart';
-import 'package:ayib/Screens/home.dart';
 import 'package:ayib/Screens/otp_verify.dart';
-import 'package:ayib/Screens/sign_up.dart';
+import 'package:ayib/Screens/reset_password.dart';
+import 'package:ayib/Screens/sign_in.dart';
 import 'package:ayib/Screens/my_notification_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
-  static const routeName = '/signin';
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({super.key});
+  static const routeName = '/forgot';
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<ForgotPassword> createState() => _SignInState();
 }
 
-class _SignInState extends State<SignIn> {
+class _SignInState extends State<ForgotPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String email = '';
-  String password = '';
   bool isButtonClicked = false;
   bool revealPassword = false;
   String errorText = '';
   bool isLoading = false;
   late Tuple2<int, String> result;
 
-  Future<void> handleSignIn() async {
+  Future<void> handleForgot() async {
     setState(() {
       isLoading = true;
     });
 
     try {
       store.dispatch(InitialiseEmail(email));
-      Tuple2<int, String> result = await signinFn(email, password);
+      Tuple2<int, String> result = await forgotPasswordFn(email);
 
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => const Home()));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const ResetPassword()));
             myNotificationBar(context, result.item2, "success");
           }
         } else {
           if (context.mounted) {
             if (result.item1 == 2) {
+              myNotificationBar(context, result.item2, "error");
+            } else if (result.item1 == 3) {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const OTPScreen()));
               myNotificationBar(context, result.item2, "error");
@@ -101,58 +101,9 @@ class _SignInState extends State<SignIn> {
                   decoration: const InputDecoration(labelText: 'Email'),
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  onChanged: (value) {
-                    setState(() {
-                      password = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    // Add more validation rules if needed
-                    return null;
-                  },
-                  obscureText: !revealPassword,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          revealPassword = !revealPassword;
-                        });
-                      },
-                      child: Icon(
-                        revealPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                            ForgotPassword.routeName,
-                            arguments: 'Passing data from SignIn');
-                      },
-                      child: const Text(
-                        "Forgot password?",
-                        style: TextStyle(
-                          color: Color(0xFF049DFE),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
                 ElevatedButton(
                   onPressed: () {
-                    handleSignIn();
+                    handleForgot();
                     // Rest of the code
                   },
                   style: ElevatedButton.styleFrom(
@@ -164,7 +115,7 @@ class _SignInState extends State<SignIn> {
                     alignment: Alignment.center,
                     children: [
                       const Text(
-                        'Sign In',
+                        'Submit',
                         style: TextStyle(color: Colors.white),
                       ),
                       if (isLoading)
@@ -187,14 +138,14 @@ class _SignInState extends State<SignIn> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Text('Don\'t have an account?'),
+                    const Text('Go back to'),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(SignUp.routeName,
-                            arguments: 'Passing data from SignIn');
+                        Navigator.of(context).pushNamed(SignIn.routeName,
+                            arguments: 'Passing data from Forgotpassword');
                       },
                       child: const Text(
-                        "Sign up",
+                        "Sign in",
                         style: TextStyle(
                           color: Color(0xFF049DFE),
                         ),

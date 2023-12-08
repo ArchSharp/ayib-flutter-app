@@ -17,12 +17,13 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController dateController = TextEditingController();
   String email = '';
   String firstname = '';
   String lastname = '';
   String mname = '';
   String password = '';
-  String dateofbirth = '';
+  DateTime? dateofbirth = null; //DateTime(2023, 01, 27);
   String phoneNumber = "";
 
   bool revealPassword = false;
@@ -69,6 +70,14 @@ class _SignUpState extends State<SignUp> {
         isLoading = false;
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the text controller with the initial date
+    dateController.text =
+        dateofbirth?.toString().replaceAll(RegExp(r' 00:00:00.000'), '') ?? '';
   }
 
   @override
@@ -159,11 +168,26 @@ class _SignUpState extends State<SignUp> {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
-                  keyboardType: TextInputType.datetime,
-                  onChanged: (value) {
-                    setState(() {
-                      dateofbirth = value;
-                    });
+                  controller: dateController,
+                  keyboardType: TextInputType.none,
+                  onTap: () async {
+                    DateTime? newDate = await showDatePicker(
+                      context: context,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                      initialDate: dateofbirth ?? DateTime.now(),
+                    );
+
+                    if (newDate != null) {
+                      setState(() {
+                        dateofbirth = newDate;
+                      });
+
+                      // Manually update the text field value
+                      dateController.text = newDate
+                          .toString()
+                          .replaceAll(RegExp(r' 00:00:00.000'), '');
+                    }
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -268,13 +292,23 @@ class _SignUpState extends State<SignUp> {
                 //     style: const TextStyle(color: Colors.red),
                 //   ),
                 // const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    // Navigate back to the SignInScreen
-                    Navigator.of(context).pushNamed(SignIn.routeName,
-                        arguments: 'Passing data from SignUp');
-                  },
-                  child: const Text('Already have an account? Sign In'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text('Already have an account?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(SignIn.routeName,
+                            arguments: 'Passing data from SignIn');
+                      },
+                      child: const Text(
+                        "Sign in",
+                        style: TextStyle(
+                          color: Color(0xFF049DFE),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

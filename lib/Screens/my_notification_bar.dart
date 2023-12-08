@@ -7,7 +7,7 @@ void myNotificationBar(BuildContext context, String message, String errorType) {
       height: 20,
       child: Text(message),
     ),
-    duration: const Duration(seconds: 10),
+    duration: const Duration(seconds: 5),
     dismissDirection: DismissDirection.up,
     elevation: 10,
     behavior: SnackBarBehavior.floating,

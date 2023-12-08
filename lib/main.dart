@@ -2,6 +2,7 @@
 
 import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/app_loading.dart';
+import 'package:ayib/Screens/forgot_password.dart';
 import 'package:ayib/Screens/home.dart';
 import 'package:ayib/Screens/otp_verify.dart';
 import 'package:ayib/Screens/sign_in.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         SignUp.routeName: (ctx) => const SignUp(),
         OTPScreen.routeName: (ctx) => const OTPScreen(),
         Home.routeName: (ctx) => const Home(),
+        ForgotPassword.routeName: (ctx) => const ForgotPassword(),
       },
     );
   }

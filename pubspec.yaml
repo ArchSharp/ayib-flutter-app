@@ -66,6 +66,16 @@ flutter:
     - assets/lets-encrypt-r3.pem
     - assets/images/addmoney.png
     - assets/images/bgImg1.png
+    - assets/images/air.png
+    - assets/images/pbill.png
+    - assets/images/mqr.png
+    - assets/images/wcash.png
+    - assets/images/pmerch.png
+    - assets/images/bundle.png
+    - assets/images/trf.png
+    - assets/images/add2.png
+    - assets/images/fav.png
+    - assets/images/agent.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -4,7 +4,7 @@ import 'package:ayib/ReduxState/store.dart';
 import 'package:http/http.dart' as http;
 import 'package:tuple/tuple.dart';
 
-String baseUrl = "https://8020-102-88-63-155.ngrok-free.app";
+String baseUrl = "https://af8c-102-88-63-210.ngrok-free.app";
 
 Future<Tuple2<int, String>> signinFn(email, pass) async {
   String apiUrl = '$baseUrl/api/SigninUser';
@@ -60,7 +60,9 @@ Future<Tuple2<int, String>> signupFn(
   final Map<String, dynamic> payload = {
     "email": email,
     "password": pass,
-    "date_of_birth": dateofbirth + "T00:00:00+00:00",
+    "date_of_birth": dateofbirth
+        .toString()
+        .replaceAll(RegExp(r' 00:00:00.000'), 'T00:00:00+00:00'),
     "firstname": fname,
     "lastname": lname,
     "middle_name": mname,
@@ -122,6 +124,83 @@ Future<Tuple2<int, String>> verifyEmailFn(email, otp) async {
         result = Tuple2(2, msg);
       } else if (msg.contains("wrong")) {
         result = Tuple2(3, msg);
+      }
+    }
+  } catch (e) {
+    print('Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> forgotPasswordFn(email) async {
+  String apiUrl = '$baseUrl/api/ForgotPassword?email=$email';
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_API_KEY",
+  };
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.get(Uri.parse(apiUrl), headers: headers);
+
+    final Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      print(data);
+      result = Tuple2(1, data['body']);
+    } else {
+      print(
+          'Request failed with status: ${response.statusCode} response payload: $data');
+
+      String msg = data['body'];
+      if (msg.contains("not found")) {
+        result = Tuple2(2, msg);
+      } else if (msg.contains("verify")) {
+        result = Tuple2(3, msg);
+      }
+    }
+  } catch (e) {
+    print('Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword) async {
+  String apiUrl = '$baseUrl/api/ResetPassword';
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_API_KEY",
+  };
+  var email = store.state.email;
+  final Map<String, dynamic> payload = {
+    "email": email,
+    "otp": otp,
+    "new_password": newPassword,
+  };
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.patch(Uri.parse(apiUrl),
+        headers: headers, body: json.encode(payload));
+
+    final Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      print(data);
+      result = Tuple2(1, data['body']);
+    } else {
+      print(
+          'Request failed with status: ${response.statusCode} response payload: $data');
+
+      String msg = data['body'];
+      if (msg.contains("not found")) {
+        result = Tuple2(2, msg);
+      } else if (msg.contains("verify")) {
+        result = Tuple2(3, msg);
+      } else if (msg.contains("invalid/wrong")) {
+        result = Tuple2(4, msg);
+      } else if (msg.contains("expired")) {
+        result = Tuple2(5, msg);
       }
     }
   } catch (e) {
