@@ -1,6 +1,8 @@
 // import 'dart:io';
 
 import 'package:ayib/ReduxState/store.dart';
+import 'package:ayib/Screens/MicroScreens/Transfers.dart';
+import 'package:ayib/Screens/MicroScreens/fund_walet.dart';
 import 'package:ayib/Screens/app_loading.dart';
 import 'package:ayib/Screens/forgot_password.dart';
 import 'package:ayib/Screens/home.dart';
@@ -48,6 +50,8 @@ class MyApp extends StatelessWidget {
         OTPScreen.routeName: (ctx) => const OTPScreen(),
         Home.routeName: (ctx) => const Home(),
         ForgotPassword.routeName: (ctx) => const ForgotPassword(),
+        FundWallet.routeName: (ctx) => const FundWallet(),
+        TransfersOptions.routeName: (ctx) => const TransfersOptions()
       },
     );
   }

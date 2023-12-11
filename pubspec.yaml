@@ -76,6 +76,8 @@ flutter:
     - assets/images/add2.png
     - assets/images/fav.png
     - assets/images/agent.png
+    - assets/images/ayibTrf.png
+    - assets/images/bank.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

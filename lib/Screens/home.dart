@@ -1,4 +1,6 @@
 import 'package:ayib/ReduxState/store.dart';
+import 'package:ayib/Screens/MicroScreens/Transfers.dart';
+import 'package:ayib/Screens/MicroScreens/fund_walet.dart';
 import 'package:ayib/Screens/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -114,12 +116,17 @@ class _HomeState extends State<Home> {
                                         ),
                                         const Spacer(),
                                         TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.of(context).pushNamed(
+                                                FundWallet.routeName,
+                                                arguments:
+                                                    'Passing data from home');
+                                          },
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               const Text(
-                                                'Add Money',
+                                                'Fund Wallet',
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: Color(0xFF049DFE),
@@ -210,8 +217,10 @@ class _HomeState extends State<Home> {
                                   children: <Widget>[
                                     InkWell(
                                       onTap: () {
-                                        // Handle button tap
-                                        print('Button tapped!');
+                                        Navigator.of(context).pushNamed(
+                                            FundWallet.routeName,
+                                            arguments:
+                                                'Passing data from home');
                                       },
                                       child: Container(
                                         width: 50.0,
@@ -228,7 +237,7 @@ class _HomeState extends State<Home> {
                                       ),
                                     ),
                                     const Text(
-                                      "Add Money",
+                                      "Fund Wallet",
                                       style: TextStyle(fontSize: 12),
                                     ),
                                   ],
@@ -239,8 +248,10 @@ class _HomeState extends State<Home> {
                                   children: <Widget>[
                                     InkWell(
                                       onTap: () {
-                                        // Handle button tap
-                                        print('Button tapped!');
+                                        Navigator.of(context).pushNamed(
+                                            TransfersOptions.routeName,
+                                            arguments:
+                                                'Passing data from home');
                                       },
                                       child: Container(
                                         width: 50.0,
