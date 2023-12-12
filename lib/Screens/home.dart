@@ -1,6 +1,7 @@
 import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/MicroScreens/Transfers.dart';
-import 'package:ayib/Screens/MicroScreens/fund_walet.dart';
+// import 'package:ayib/Screens/MicroScreens/fund_walet.dart';
+import 'package:ayib/Screens/MicroScreens/webview2.dart';
 import 'package:ayib/Screens/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -118,7 +119,7 @@ class _HomeState extends State<Home> {
                                         TextButton(
                                           onPressed: () {
                                             Navigator.of(context).pushNamed(
-                                                FundWallet.routeName,
+                                                WebView2.routeName,
                                                 arguments:
                                                     'Passing data from home');
                                           },
@@ -218,7 +219,7 @@ class _HomeState extends State<Home> {
                                     InkWell(
                                       onTap: () {
                                         Navigator.of(context).pushNamed(
-                                            FundWallet.routeName,
+                                            WebView2.routeName,
                                             arguments:
                                                 'Passing data from home');
                                       },
