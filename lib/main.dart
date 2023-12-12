@@ -2,7 +2,9 @@
 
 import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/MicroScreens/Transfers.dart';
+import 'package:ayib/Screens/MicroScreens/Webview.dart';
 import 'package:ayib/Screens/MicroScreens/fund_walet.dart';
+import 'package:ayib/Screens/MicroScreens/webview2.dart';
 import 'package:ayib/Screens/app_loading.dart';
 import 'package:ayib/Screens/forgot_password.dart';
 import 'package:ayib/Screens/home.dart';
@@ -11,10 +13,12 @@ import 'package:ayib/Screens/sign_in.dart';
 import 'package:ayib/Screens/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 // import 'package:flutter/services.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: '.env');
   // WidgetsFlutterBinding.ensureInitialized();
 
   // ByteData data =
@@ -51,7 +55,14 @@ class MyApp extends StatelessWidget {
         Home.routeName: (ctx) => const Home(),
         ForgotPassword.routeName: (ctx) => const ForgotPassword(),
         FundWallet.routeName: (ctx) => const FundWallet(),
-        TransfersOptions.routeName: (ctx) => const TransfersOptions()
+        TransfersOptions.routeName: (ctx) => const TransfersOptions(),
+        // LoadWebView.routeName: (ctx) {
+        //   final String? initialUrl =
+        //       ModalRoute.of(ctx)?.settings.arguments as String?;
+
+        //   return LoadWebView(initialUrl: initialUrl ?? '');
+        // },
+        WebView2.routeName: (ctx) => const WebView2(),
       },
     );
   }

@@ -13,3 +13,9 @@ class InitialiseEmail {
 class LogOut {
   LogOut();
 }
+
+class SaveUserToken {
+  final Map<String, dynamic> userToken;
+
+  SaveUserToken(this.userToken);
+}

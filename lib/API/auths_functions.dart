@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:ayib/Model/user.dart';
 import 'package:ayib/ReduxState/actions.dart';
 import 'package:ayib/ReduxState/store.dart';
 import 'package:http/http.dart' as http;
 import 'package:tuple/tuple.dart';
 
-String baseUrl = "https://c316-102-88-35-209.ngrok-free.app";
+String baseUrl = "https://837e-102-88-63-168.ngrok-free.app";
 
 Future<Tuple2<int, String>> signinFn(email, pass) async {
   String apiUrl = '$baseUrl/api/SigninUser';
@@ -25,8 +26,9 @@ Future<Tuple2<int, String>> signinFn(email, pass) async {
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200) {
-      // print(data);
+      // print(data["extrainfo"]);
       store.dispatch(UpdateUserAction(data['body']));
+      store.dispatch(SaveUserToken(data["extrainfo"]));
       result = const Tuple2(1, "Login success");
     } else {
       // Handle errors
@@ -49,31 +51,19 @@ Future<Tuple2<int, String>> signinFn(email, pass) async {
   return result;
 }
 
-Future<Tuple2<int, String>> signupFn(
-    email, phone, pass, fname, lname, mname, dateofbirth) async {
+Future<Tuple2<int, String>> signupFn(UserPayload payload) async {
   String apiUrl = '$baseUrl/api/NewUser';
   final Map<String, String> headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer YOUR_API_KEY",
   };
 
-  final Map<String, dynamic> payload = {
-    "email": email,
-    "password": pass,
-    "date_of_birth": dateofbirth
-        .toString()
-        .replaceAll(RegExp(r' 00:00:00.000'), 'T00:00:00+00:00'),
-    "firstname": fname,
-    "lastname": lname,
-    "middle_name": mname,
-    "phone_number": phone
-  };
   // print(payload);
 
   var result = const Tuple2(0, "");
   try {
     final response = await http.post(Uri.parse(apiUrl),
-        headers: headers, body: json.encode(payload));
+        headers: headers, body: json.encode(payload.toJson()));
 
     final Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 201) {

@@ -1,4 +1,5 @@
 import 'package:ayib/API/auths_functions.dart';
+import 'package:ayib/Model/user.dart';
 import 'package:ayib/ReduxState/actions.dart';
 import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/otp_verify.dart';
@@ -37,10 +38,22 @@ class _SignUpState extends State<SignUp> {
       isLoading = true;
     });
 
+    // Create an instance of UserPayload
+    UserPayload userPayload = UserPayload(
+      email: email,
+      password: password,
+      dateOfBirth: dateofbirth
+          .toString()
+          .replaceAll(RegExp(r' 00:00:00.000'), 'T00:00:00+00:00'),
+      firstname: firstname,
+      lastname: lastname,
+      middleName: mname,
+      phoneNumber: phoneNumber,
+    );
+
     try {
       store.dispatch(InitialiseEmail(email));
-      Tuple2<int, String> result = await signupFn(email, phoneNumber, password,
-          firstname, lastname, mname, dateofbirth);
+      Tuple2<int, String> result = await signupFn(userPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
@@ -104,6 +117,7 @@ class _SignUpState extends State<SignUp> {
                     width: imageWidth, height: 250),
                 const SizedBox(height: 2),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     setState(() {
                       lastname = value;
@@ -120,6 +134,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     setState(() {
                       firstname = value;
@@ -136,6 +151,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     setState(() {
                       mname = value;
@@ -152,6 +168,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     setState(() {
                       email = value;
@@ -169,6 +186,7 @@ class _SignUpState extends State<SignUp> {
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: dateController,
+                  textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.none,
                   onTap: () async {
                     DateTime? newDate = await showDatePicker(
@@ -206,6 +224,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     setState(() {
                       phoneNumber = value;
@@ -228,6 +247,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     setState(() {
                       password = value;
