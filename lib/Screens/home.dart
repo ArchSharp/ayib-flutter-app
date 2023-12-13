@@ -1,3 +1,4 @@
+import 'package:ayib/API/auths_functions.dart';
 import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/MicroScreens/Transfers.dart';
 // import 'package:ayib/Screens/MicroScreens/fund_walet.dart';
@@ -24,6 +25,8 @@ class _HomeState extends State<Home> {
     super.initState();
     // Initially, hide the system navigation bar
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+    fetchUserWalletFn(store.state.email);
   }
 
   void showNavBar() {
@@ -64,6 +67,9 @@ class _HomeState extends State<Home> {
           builder: (context, state /*user*/) {
             var fname = store.state.user['firstname'];
             // var lname = store.state.user['lastname'];
+            var bal = store.state.userWallet['balance'];
+            var balance =
+                bal == null ? "0" : double.parse(bal).toStringAsFixed(2);
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -151,7 +157,7 @@ class _HomeState extends State<Home> {
                                       children: [
                                         Text(
                                           showBalance
-                                              ? 'NGN236,600.00'
+                                              ? 'NGN$balance'
                                               : '***********',
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w900,

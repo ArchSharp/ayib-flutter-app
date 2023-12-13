@@ -19,3 +19,9 @@ class SaveUserToken {
 
   SaveUserToken(this.userToken);
 }
+
+class SaveUserWallet {
+  final Map<String, dynamic> userWallet;
+
+  SaveUserWallet(this.userWallet);
+}

@@ -2,10 +2,11 @@ import 'package:ayib/API/flutterwave.dart';
 import 'package:ayib/Model/payment_link.dart';
 import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/MicroScreens/Webview.dart';
-import 'package:ayib/Screens/MicroScreens/webview2.dart';
+// import 'package:ayib/Screens/MicroScreens/webview2.dart';
 // import 'package:ayib/Screens/MicroScreens/webview2.txt';
 import 'package:ayib/Screens/my_notification_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterwave_standard/core/flutterwave.dart';
 import 'package:tuple/tuple.dart';
 
 class FundWallet extends StatefulWidget {
@@ -22,59 +23,60 @@ class _FundWalletState extends State<FundWallet> {
   String paymentUrl = "";
 
   Future<void> fundwalletFn() async {
-    Navigator.of(context).pushNamed(WebView2.routeName, arguments: "");
+    // Navigator.of(context).pushNamed(WebView2.routeName, arguments: "");
     // Create an instance of ICustomer
-    // var user = store.state.user;
-    // ICustomer customer = ICustomer(
-    //   email: user["email"],
-    //   phoneNumber: user["phone_number"],
-    //   name: user["lastname"] + " " + user["firstname"],
-    // );
+    var user = store.state.user;
+    ICustomer customer = ICustomer(
+      email: user["email"],
+      phoneNumber: user["phone_number"],
+      name: user["lastname"] + " " + user["firstname"],
+    );
 
-    // // Create an instance of IMeta
-    // IMeta meta = IMeta(
-    //   consumerId: 123,
-    //   consumerMac: 'mac_address',
-    // );
+    // Create an instance of IMeta
+    IMeta meta = IMeta(
+      consumerId: 123,
+      consumerMac: 'mac_address',
+    );
 
-    // // Create an instance of ICustomizations
-    // ICustomizations customization = ICustomizations(
-    //   title: "ArchIntel Ltd",
-    //   logo:
-    //       'https://archdemy.netlify.app/static/media/archintel-nobg.1c7feb8033d0420b2461.png',
-    //   description: 'We deliver great development',
-    // );
+    // Create an instance of ICustomizations
+    ICustomizations customization = ICustomizations(
+      title: "ArchIntel Ltd",
+      logo:
+          'https://archdemy.netlify.app/static/media/archintel-nobg.1c7feb8033d0420b2461.png',
+      description: 'We deliver great development',
+    );
 
-    // // Create an instance of PaymentLinkPayload
-    // PaymentLinkPayload paymentPayload = PaymentLinkPayload(
-    //   customer: customer,
-    //   txRef: 'transaction_reference',
-    //   amount: amount.toString(),
-    //   currency: 'NGN',
-    //   redirectUrl: 'https://example.com/redirect',
-    //   meta: meta,
-    //   customization: customization,
-    // );
+    // Create an instance of PaymentLinkPayload
+    PaymentLinkPayload paymentPayload = PaymentLinkPayload(
+      customer: customer,
+      txRef: 'transaction_reference',
+      amount: amount.toString(),
+      currency: 'NGN',
+      redirectUrl: 'https://example.com/redirect',
+      meta: meta,
+      customization: customization,
+    );
 
-    // try {
-    //   Tuple2<int, String> result = await createPaymentLink(paymentPayload);
-    //   if (amount > 0) {
-    //     if (context.mounted) {
-    //       if (result.item1 == 1) {
-    //         Navigator.of(context)
-    //             .pushNamed(LoadWebView.routeName, arguments: result.item2);
-    //         // myNotificationBar(context, result.item2, "success");
-    //       } else {
-    //         // Failed payment link
-    //         myNotificationBar(context, result.item2, "error");
-    //       }
-    //     }
-    //   }
-    // } finally {
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-    // }
+    try {
+      Tuple2<int, String> result =
+          await createPaymentLink(paymentPayload as Flutterwave);
+      if (amount > 0) {
+        if (context.mounted) {
+          if (result.item1 == 1) {
+            Navigator.of(context)
+                .pushNamed(LoadWebView.routeName, arguments: result.item2);
+            // myNotificationBar(context, result.item2, "success");
+          } else {
+            // Failed payment link
+            myNotificationBar(context, result.item2, "error");
+          }
+        }
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override

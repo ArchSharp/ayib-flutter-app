@@ -19,8 +19,11 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
       currentIndex: _currentIndex,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
+          icon: IconButton(
+            onPressed: () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+            icon: const Icon(Icons.home),
             color: _currentIndex == 0 ? const Color(0xFF049DFE) : Colors.grey,
           ),
           label: 'Home',

@@ -1,3 +1,4 @@
+import 'package:ayib/API/auths_functions.dart';
 import 'package:ayib/API/flutterwave.dart';
 import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/bottom_navbar.dart';
@@ -122,8 +123,9 @@ class _WebView2State extends State<WebView2> {
           final ChargeResponse response = await flutterwave.charge();
           // showLoading(response.toString());
           print("response: ${response.toJson()}");
-          flutterwave.amount = response.status!;
+          flutterwave.currency = response.status!;
           flutterwave.txRef = response.txRef!;
+
           Tuple2<int, String> updateFund = await createPaymentLink(flutterwave);
           if (context.mounted) {
             if (updateFund.item1 == 1) {
@@ -132,6 +134,9 @@ class _WebView2State extends State<WebView2> {
               String msg = response.success == true
                   ? "Funding succeeded"
                   : "Funding failed";
+              if (response.success == true) {
+                await fetchUserWalletFn(user["email"]);
+              }
               myNotificationBar(context, msg, respStatus);
             } else {
               myNotificationBar(context, result.item2, "error");

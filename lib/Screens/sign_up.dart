@@ -24,7 +24,7 @@ class _SignUpState extends State<SignUp> {
   String lastname = '';
   String mname = '';
   String password = '';
-  DateTime? dateofbirth = null; //DateTime(2023, 01, 27);
+  DateTime? dateofbirth; //DateTime(2023, 01, 27);
   String phoneNumber = "";
 
   bool revealPassword = false;

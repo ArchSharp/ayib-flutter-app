@@ -5,7 +5,7 @@ import 'package:ayib/ReduxState/store.dart';
 import 'package:http/http.dart' as http;
 import 'package:tuple/tuple.dart';
 
-String baseUrl = "https://72b0-102-88-63-38.ngrok-free.app";
+String baseUrl = "https://dd8d-102-88-69-57.ngrok-free.app";
 
 Future<Tuple2<int, String>> signinFn(email, pass) async {
   String apiUrl = '$baseUrl/api/SigninUser';
@@ -191,6 +191,40 @@ Future<Tuple2<int, String>> resetPasswordFn(otp, newPassword) async {
         result = Tuple2(4, msg);
       } else if (msg.contains("expired")) {
         result = Tuple2(5, msg);
+      }
+    }
+  } catch (e) {
+    print('Error: $e');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> fetchUserWalletFn(email) async {
+  String apiUrl = '$baseUrl/api/FetchUserWallet?email=$email';
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Authorization": 'Bearer ${store.state.userToken["accesstoken"]}',
+  };
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.get(Uri.parse(apiUrl), headers: headers);
+
+    Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      store.dispatch(SaveUserWallet(data["body"]));
+      // print(data);
+      result = const Tuple2(1, "wallet fetched");
+    } else {
+      // print(
+      //     'Request failed with status: ${response.statusCode} response payload: $data');
+
+      String msg = data['body'];
+      if (msg.contains("not found")) {
+        result = Tuple2(2, msg);
+      } else if (msg.contains("verify")) {
+        result = Tuple2(3, msg);
       }
     }
   } catch (e) {

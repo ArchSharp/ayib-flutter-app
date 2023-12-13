@@ -6,7 +6,7 @@ import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:tuple/tuple.dart';
 import 'package:http/http.dart' as http;
 
-String baseUrl = "https://72b0-102-88-63-38.ngrok-free.app";
+String baseUrl = "https://dd8d-102-88-69-57.ngrok-free.app";
 
 Future<Tuple2<int, String>> createPaymentLink(Flutterwave payload) async {
   String apiUrl = '$baseUrl/api/FundWalletMobile';
@@ -42,7 +42,7 @@ Future<Tuple2<int, String>> createPaymentLink(Flutterwave payload) async {
     customer: customer,
     txRef: payload.txRef,
     amount: payload.amount,
-    currency: 'NGN',
+    currency: payload.currency,
     redirectUrl: 'https://example.com/redirect',
     meta: meta,
     customization: customization,
