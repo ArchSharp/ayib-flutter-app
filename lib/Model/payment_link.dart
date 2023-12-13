@@ -46,7 +46,7 @@ class PaymentLinkPayload {
 
 class ICustomer {
   String email;
-  String phoneNumber;
+  String? phoneNumber;
   String name;
 
   ICustomer({

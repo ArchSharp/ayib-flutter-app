@@ -86,6 +86,7 @@ class _SignInState extends State<SignIn> {
                     width: imageWidth, height: 250),
                 const SizedBox(height: 16),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     setState(() {
                       email = value;
@@ -102,6 +103,7 @@ class _SignInState extends State<SignIn> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     setState(() {
                       password = value;

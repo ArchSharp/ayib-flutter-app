@@ -1,7 +1,11 @@
+import 'package:ayib/API/flutterwave.dart';
 import 'package:ayib/ReduxState/store.dart';
+import 'package:ayib/Screens/bottom_navbar.dart';
+import 'package:ayib/Screens/my_notification_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
+import 'package:tuple/tuple.dart';
 
 class WebView2 extends StatefulWidget {
   const WebView2({super.key});
@@ -17,9 +21,14 @@ class _WebView2State extends State<WebView2> {
   var user = store.state.user;
   final formKey = GlobalKey<FormState>();
   final amountController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceHeight = MediaQuery.of(context).size.height;
+    double imageWidth = deviceWidth * 0.8;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -28,6 +37,10 @@ class _WebView2State extends State<WebView2> {
           key: formKey,
           child: ListView(
             children: <Widget>[
+              SizedBox(height: (deviceHeight * 0.1)),
+              Image.asset('assets/images/Ayib.jpg',
+                  width: imageWidth, height: 250),
+              SizedBox(height: (deviceHeight * 0.05)),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: TextFormField(
@@ -47,8 +60,12 @@ class _WebView2State extends State<WebView2> {
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: ElevatedButton(
                   onPressed: _onPressed,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF049DFE),
+                    fixedSize: Size.fromWidth(deviceWidth / 3),
+                  ),
                   child: const Text(
-                    "Make Payment",
+                    "Fund wallet",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -57,6 +74,7 @@ class _WebView2State extends State<WebView2> {
           ),
         ),
       ),
+      bottomNavigationBar: const MyBottomNavBar(),
     );
   }
 
@@ -68,32 +86,67 @@ class _WebView2State extends State<WebView2> {
   }
 
   _handlePaymentInitialization() async {
-    final Customer customer = Customer(
-      email: user["email"],
-      name: user["lastname"] + " " + user["firstname"],
-      phoneNumber: user["phone_number"],
-    );
+    try {
+      setState(() {
+        isLoading = false;
+      });
 
-    final Flutterwave flutterwave = Flutterwave(
-      context: context,
-      publicKey: apiKey!,
-      currency: "NGN",
-      redirectUrl: 'https://facebook.com',
-      txRef: "uytgu764edf",
-      amount: amountController.text.toString().trim(),
-      customer: customer,
-      paymentOptions: "card, payattitude, barter, bank transfer, ussd",
-      customization: Customization(
-        title: "ArchIntel Ltd",
-        logo:
-            'https://archdemy.netlify.app/static/media/archintel-nobg.1c7feb8033d0420b2461.png',
-        description: 'We deliver great development',
-      ),
-      isTestMode: true,
-    );
-    final ChargeResponse response = await flutterwave.charge();
-    showLoading(response.toString());
-    print("${response.toJson()}");
+      final Customer customer = Customer(
+        email: user["email"],
+        name: user["lastname"] + " " + user["firstname"],
+        phoneNumber: user["phone_number"],
+      );
+
+      final Flutterwave flutterwave = Flutterwave(
+        context: context,
+        publicKey: apiKey!,
+        currency: "NGN",
+        redirectUrl: 'https://facebook.com',
+        txRef: 'notyet',
+        amount: amountController.text.toString().trim(),
+        customer: customer,
+        paymentOptions: "card, payattitude, barter, bank transfer, ussd",
+        customization: Customization(
+          title: "ArchIntel Ltd",
+          logo:
+              'https://archdemy.netlify.app/static/media/archintel-nobg.1c7feb8033d0420b2461.png',
+          description: 'We deliver great development',
+        ),
+        isTestMode: true,
+      );
+
+      Tuple2<int, String> result = await createPaymentLink(flutterwave);
+      if (context.mounted) {
+        if (result.item1 == 1) {
+          flutterwave.txRef = result.item2;
+          final ChargeResponse response = await flutterwave.charge();
+          // showLoading(response.toString());
+          print("response: ${response.toJson()}");
+          flutterwave.amount = response.status!;
+          flutterwave.txRef = response.txRef!;
+          Tuple2<int, String> updateFund = await createPaymentLink(flutterwave);
+          if (context.mounted) {
+            if (updateFund.item1 == 1) {
+              String respStatus =
+                  response.success == true ? "success" : "error";
+              String msg = response.success == true
+                  ? "Funding succeeded"
+                  : "Funding failed";
+              myNotificationBar(context, msg, respStatus);
+            } else {
+              myNotificationBar(context, result.item2, "error");
+            }
+            Navigator.of(context).pop(WebView2.routeName);
+          }
+        } else {
+          myNotificationBar(context, result.item2, "error");
+        }
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Future<void> showLoading(String message) {

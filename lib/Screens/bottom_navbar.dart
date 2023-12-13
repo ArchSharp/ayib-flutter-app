@@ -57,6 +57,8 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
           logoutFn();
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => const SignIn()));
+        } else if (index == 1) {
+          Navigator.popUntil(context, (route) => route.isFirst);
         }
       },
     );
