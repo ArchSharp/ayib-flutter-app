@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:ayib/Model/payment_link.dart';
 import 'package:ayib/ReduxState/store.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:tuple/tuple.dart';
 import 'package:http/http.dart' as http;
 
-String baseUrl = "https://dd8d-102-88-69-57.ngrok-free.app";
+String? baseUrl = dotenv.env['NGROK_URL'];
 
 Future<Tuple2<int, String>> createPaymentLink(Flutterwave payload) async {
   String apiUrl = '$baseUrl/api/FundWalletMobile';

@@ -1,10 +1,12 @@
 // import 'dart:io';
 
 import 'package:ayib/ReduxState/store.dart';
-import 'package:ayib/Screens/MicroScreens/Transfers.dart';
+import 'package:ayib/Screens/MicroScreens/paybills.dart';
+import 'package:ayib/Screens/MicroScreens/transfers.dart';
 // import 'package:ayib/Screens/MicroScreens/Webview.dart';
 import 'package:ayib/Screens/MicroScreens/fund_walet.dart';
 import 'package:ayib/Screens/MicroScreens/webview2.dart';
+import 'package:ayib/Screens/MicroScreens/withdraws.dart';
 import 'package:ayib/Screens/app_loading.dart';
 import 'package:ayib/Screens/forgot_password.dart';
 import 'package:ayib/Screens/home.dart';
@@ -56,6 +58,8 @@ class MyApp extends StatelessWidget {
         ForgotPassword.routeName: (ctx) => const ForgotPassword(),
         FundWallet.routeName: (ctx) => const FundWallet(),
         TransfersOptions.routeName: (ctx) => const TransfersOptions(),
+        PayBillsOptions.routeName: (ctx) => const PayBillsOptions(),
+        WithdrawOptions.routeName: (ctx) => const WithdrawOptions(),
         // LoadWebView.routeName: (ctx) {
         //   final String? initialUrl =
         //       ModalRoute.of(ctx)?.settings.arguments as String?;

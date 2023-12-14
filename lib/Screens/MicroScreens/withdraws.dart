@@ -1,9 +1,9 @@
 import 'package:ayib/Screens/home.dart';
 import 'package:flutter/material.dart';
 
-class TransfersOptions extends StatelessWidget {
-  const TransfersOptions({super.key});
-  static const routeName = '/transfersOptions';
+class WithdrawOptions extends StatelessWidget {
+  const WithdrawOptions({super.key});
+  static const routeName = '/withdrawOptions';
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class TransfersOptions extends StatelessWidget {
                   ),
                   SizedBox(width: deviceWidth * 0.1),
                   const Text(
-                    "Transfer Money",
+                    "Withdraw Money",
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 22,
@@ -65,14 +65,14 @@ class TransfersOptions extends StatelessWidget {
                       color: Color.fromRGBO(4, 157, 254, 0.1),
                     ),
                     child: Image.asset(
-                      'assets/images/ayibTrf.png',
+                      'assets/images/bank.png',
                       width: 20,
                       height: 20,
                     ),
                   ),
                   SizedBox(width: deviceWidth * 0.05),
                   const Text(
-                    "Ayib to Ayib wallet",
+                    "Withdraw via Bank",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
@@ -111,46 +111,7 @@ class TransfersOptions extends StatelessWidget {
                   ),
                   SizedBox(width: deviceWidth * 0.05),
                   const Text(
-                    "Other accounts and banks",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                  ),
-                  const Spacer(),
-                  Icon(
-                    Icons.chevron_right,
-                    size: deviceWidth * 0.1,
-                  ),
-                  SizedBox(width: deviceWidth * 0.04)
-                ],
-              ),
-            ),
-            SizedBox(height: deviceHeight * 0.02),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(Home.routeName,
-                    arguments: 'Passing data from home');
-              },
-              child: Row(
-                children: <Widget>[
-                  SizedBox(width: deviceWidth * 0.05),
-                  Container(
-                    width: 50.0,
-                    height: 50.0,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color.fromRGBO(4, 157, 254, 0.1),
-                    ),
-                    child: Image.asset(
-                      'assets/images/bank.png',
-                      width: 20,
-                      height: 20,
-                    ),
-                  ),
-                  SizedBox(width: deviceWidth * 0.05),
-                  const Text(
-                    "Other payment service bank",
+                    "Withdraw via payment service bank",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12,

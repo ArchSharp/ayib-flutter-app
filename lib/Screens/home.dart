@@ -1,8 +1,10 @@
 import 'package:ayib/API/auths_functions.dart';
 import 'package:ayib/ReduxState/store.dart';
-import 'package:ayib/Screens/MicroScreens/Transfers.dart';
+import 'package:ayib/Screens/MicroScreens/paybills.dart';
+import 'package:ayib/Screens/MicroScreens/transfers.dart';
 // import 'package:ayib/Screens/MicroScreens/fund_walet.dart';
 import 'package:ayib/Screens/MicroScreens/webview2.dart';
+import 'package:ayib/Screens/MicroScreens/withdraws.dart';
 import 'package:ayib/Screens/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -122,30 +124,34 @@ class _HomeState extends State<Home> {
                                           ),
                                         ),
                                         const Spacer(),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pushNamed(
-                                                WebView2.routeName,
-                                                arguments:
-                                                    'Passing data from home');
-                                          },
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Text(
-                                                'Fund Wallet',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFF049DFE),
-                                                ),
+                                        Column(
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pushNamed(
+                                                    WebView2.routeName,
+                                                    arguments:
+                                                        'Passing data from home');
+                                              },
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const Text(
+                                                    'Fund Wallet',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Color(0xFF049DFE),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Image.asset(
+                                                      'assets/images/addmoney.png',
+                                                      width: 20,
+                                                      height: 20)
+                                                ],
                                               ),
-                                              const SizedBox(width: 5),
-                                              Image.asset(
-                                                  'assets/images/addmoney.png',
-                                                  width: 20,
-                                                  height: 20)
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -353,8 +359,10 @@ class _HomeState extends State<Home> {
                                   children: <Widget>[
                                     InkWell(
                                       onTap: () {
-                                        // Handle button tap
-                                        print('Button tapped!');
+                                        Navigator.of(context).pushNamed(
+                                            WithdrawOptions.routeName,
+                                            arguments:
+                                                'Passing data from home');
                                       },
                                       child: Container(
                                         width: 50.0,
@@ -383,7 +391,10 @@ class _HomeState extends State<Home> {
                                     InkWell(
                                       onTap: () {
                                         // Handle button tap
-                                        print('Button tapped!');
+                                        Navigator.of(context).pushNamed(
+                                            PayBillsOptions.routeName,
+                                            arguments:
+                                                'Passing data from home');
                                       },
                                       child: Container(
                                         width: 50.0,
