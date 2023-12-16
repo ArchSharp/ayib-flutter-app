@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ayib/Model/payment_link.dart';
+import 'package:ayib/Model/transactions.dart';
 import 'package:ayib/ReduxState/store.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
@@ -67,6 +68,79 @@ Future<Tuple2<int, String>> createPaymentLink(Flutterwave payload) async {
       // print('check error: $data');
 
       result = const Tuple2(2, "Could not create txref");
+    }
+  } catch (e) {
+    // Handle exceptions
+    print('Error: $e');
+    // print('check error: $data');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> fetchAyibAccName(String payload) async {
+  String apiUrl = '$baseUrl/api/ValidateAyibAcct?acctNum=$payload';
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Authorization": 'Bearer ${store.state.userToken["accesstoken"]}',
+  };
+
+  // print("Request Payload: ${payload.amount}");
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.get(Uri.parse(apiUrl), headers: headers);
+    // print("object-1: ${response.body}");
+    final Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      print(data);
+      result = Tuple2(1, data["body"]["Name"]);
+    } else {
+      // Handle errors
+      // print('Request failed with status: ${response.statusCode}');
+      // print('check error: $data');
+
+      result = const Tuple2(2, "Could not create txref");
+    }
+  } catch (e) {
+    // Handle exceptions
+    print('Error: $e');
+    // print('check error: $data');
+    result = const Tuple2(-1, "Network error");
+  }
+  return result;
+}
+
+Future<Tuple2<int, String>> ayibTransferFn(var payload) async {
+  String apiUrl = '$baseUrl/api/AyibTransfer';
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Authorization": 'Bearer ${store.state.userToken["accesstoken"]}',
+  };
+
+  // print("Request Payload: ${payload.amount}");
+
+  var result = const Tuple2(0, "");
+  try {
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: headers,
+      body: json.encode(payload),
+    );
+    // print("object-1: ${response.body}");
+    final Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      // print(data);
+      result = Tuple2(1, data["body"]);
+    } else {
+      // Handle errors
+      // print('Request failed with status: ${response.statusCode}');
+      print('check error: $data');
+
+      result = const Tuple2(2, "Could not create txref");
+      if (data['message'] == "Same user") {
+        result = Tuple2(2, data['message']);
+      }
     }
   } catch (e) {
     // Handle exceptions

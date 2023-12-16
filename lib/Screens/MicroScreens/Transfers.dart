@@ -1,3 +1,5 @@
+import 'package:ayib/Screens/ayib_transfer.dart';
+import 'package:ayib/Screens/bottom_navbar.dart';
 import 'package:ayib/Screens/home.dart';
 import 'package:flutter/material.dart';
 
@@ -51,8 +53,8 @@ class TransfersOptions extends StatelessWidget {
             SizedBox(height: deviceHeight * 0.02),
             InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed(Home.routeName,
-                    arguments: 'Passing data from home');
+                Navigator.of(context).pushNamed(AyibTransfer.routeName,
+                    arguments: 'Passing data from transfers');
               },
               child: Row(
                 children: <Widget>[
@@ -167,6 +169,7 @@ class TransfersOptions extends StatelessWidget {
             ),
           ],
         ),
+        bottomNavigationBar: const MyBottomNavBar(),
       ),
     );
   }

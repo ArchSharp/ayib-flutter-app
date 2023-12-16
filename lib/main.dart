@@ -8,6 +8,7 @@ import 'package:ayib/Screens/MicroScreens/fund_walet.dart';
 import 'package:ayib/Screens/MicroScreens/webview2.dart';
 import 'package:ayib/Screens/MicroScreens/withdraws.dart';
 import 'package:ayib/Screens/app_loading.dart';
+import 'package:ayib/Screens/ayib_transfer.dart';
 import 'package:ayib/Screens/forgot_password.dart';
 import 'package:ayib/Screens/home.dart';
 import 'package:ayib/Screens/otp_verify.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         TransfersOptions.routeName: (ctx) => const TransfersOptions(),
         PayBillsOptions.routeName: (ctx) => const PayBillsOptions(),
         WithdrawOptions.routeName: (ctx) => const WithdrawOptions(),
+        AyibTransfer.routeName: (ctx) => const AyibTransfer(),
         // LoadWebView.routeName: (ctx) {
         //   final String? initialUrl =
         //       ModalRoute.of(ctx)?.settings.arguments as String?;

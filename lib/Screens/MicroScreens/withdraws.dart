@@ -1,3 +1,4 @@
+import 'package:ayib/Screens/bottom_navbar.dart';
 import 'package:ayib/Screens/home.dart';
 import 'package:flutter/material.dart';
 
@@ -128,6 +129,7 @@ class WithdrawOptions extends StatelessWidget {
             ),
           ],
         ),
+        bottomNavigationBar: const MyBottomNavBar(),
       ),
     );
   }

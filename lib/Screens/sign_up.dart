@@ -234,15 +234,12 @@ class _SignUpState extends State<SignUp> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your phone number';
                     }
-                    // You can add additional phone number validation rules if needed
                     return null;
                   },
-                  keyboardType: TextInputType
-                      .phone, // Set the keyboard type to handle phone numbers
+                  keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     labelText: 'Phone Number',
-                    prefixIcon: Icon(Icons
-                        .phone), // Add an icon to the left of the input field
+                    prefixIcon: Icon(Icons.phone),
                   ),
                 ),
                 const SizedBox(height: 8),
