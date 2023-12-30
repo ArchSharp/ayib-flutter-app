@@ -1,4 +1,5 @@
 import 'package:ayib/API/auths_functions.dart';
+import 'package:ayib/API/flutterwave.dart';
 import 'package:ayib/ReduxState/store.dart';
 import 'package:ayib/Screens/MicroScreens/paybills.dart';
 import 'package:ayib/Screens/MicroScreens/transfers.dart';
@@ -28,7 +29,7 @@ class _HomeState extends State<Home> {
     // Initially, hide the system navigation bar
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
-    fetchUserWalletFn(store.state.email);
+    fetchUserWalletFn(store.state.email).then((_) => {fetchBanks()});
   }
 
   void showNavBar() {

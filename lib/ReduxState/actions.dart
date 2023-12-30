@@ -25,3 +25,9 @@ class SaveUserWallet {
 
   SaveUserWallet(this.userWallet);
 }
+
+class GetBanks {
+  final List<dynamic> banks;
+
+  GetBanks(this.banks);
+}

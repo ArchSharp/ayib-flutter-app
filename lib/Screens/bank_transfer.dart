@@ -5,15 +5,15 @@ import 'package:ayib/Screens/my_notification_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
-class AyibTransfer extends StatefulWidget {
-  const AyibTransfer({super.key});
-  static const routeName = '/ayibTransfer';
+class BankTransfer extends StatefulWidget {
+  const BankTransfer({super.key});
+  static const routeName = '/bankTransfer';
 
   @override
-  State<AyibTransfer> createState() => _AyibTransferState();
+  State<BankTransfer> createState() => _BankTransferState();
 }
 
-class _AyibTransferState extends State<AyibTransfer> {
+class _BankTransferState extends State<BankTransfer> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController acctNameController = TextEditingController();
   String accountNumber = '';
@@ -27,6 +27,13 @@ class _AyibTransferState extends State<AyibTransfer> {
 
   String errorText = '';
   bool isLoading = false;
+  // List<Map<String, String>> banks = [
+  //   {"name": "Bank A", "code": "98"},
+  //   {"name": "Bank B", "code": "42"},
+  //   // Add more banks as needed
+  // ];
+  List<dynamic> banks = store.state.banks;
+  String? selectedBank;
 
   @override
   void initState() {
@@ -35,7 +42,8 @@ class _AyibTransferState extends State<AyibTransfer> {
 
   Future<void> fetchDataFromApi() async {
     // ... your API call logic
-    Tuple2<int, String> result = await fetchAyibAccName(accountNumber);
+    Tuple2<int, String> result =
+        await fetchBankAccName(accountNumber, selectedBank!);
     if (result.item1 == 1) {
       setState(() {
         name = result.item2;
@@ -46,7 +54,7 @@ class _AyibTransferState extends State<AyibTransfer> {
     }
   }
 
-  Future<void> handleAyibTransfer() async {
+  Future<void> handleBankTransfer() async {
     setState(() {
       isLoading = true;
     });
@@ -54,7 +62,7 @@ class _AyibTransferState extends State<AyibTransfer> {
     // Create an instance of UserPayload
 
     var ayibPayload = {
-      'beneficiary': beneficiary,
+      'bankCode': selectedBank,
       'accountNumber': accountNumber,
       'narration': narration,
       'amount': amount,
@@ -63,7 +71,7 @@ class _AyibTransferState extends State<AyibTransfer> {
     };
 
     try {
-      Tuple2<int, String> result = await ayibTransferFn(ayibPayload);
+      Tuple2<int, String> result = await bankTransferFn(ayibPayload);
       if (_formKey.currentState?.validate() ?? false) {
         if (result.item1 == 1) {
           if (context.mounted) {
@@ -99,7 +107,8 @@ class _AyibTransferState extends State<AyibTransfer> {
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
-
+    // print("BANKS: ");
+    // print(banks);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -129,7 +138,7 @@ class _AyibTransferState extends State<AyibTransfer> {
                   ),
                   SizedBox(width: deviceWidth * 0.1),
                   const Text(
-                    "Ayib to Ayib",
+                    "Bank transfer",
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 22,
@@ -155,7 +164,7 @@ class _AyibTransferState extends State<AyibTransfer> {
                           accountNumber = value;
                         });
                         if (value.length == 10) {
-                          await fetchDataFromApi();
+                          // await fetchDataFromApi();
                         }
                       },
                       validator: (value) {
@@ -176,6 +185,39 @@ class _AyibTransferState extends State<AyibTransfer> {
                           ),
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                      autovalidateMode: AutovalidateMode.always,
+                      value: selectedBank,
+                      items: banks.map(
+                        (dynamic bank) {
+                          final truncatedName = bank["name"]!.length > 30
+                              ? '${bank["name"]!.substring(0, 30)}...'
+                              : bank["name"]!;
+                          return DropdownMenuItem<String>(
+                            value: bank["code"],
+                            child: Tooltip(
+                              message: bank["name"]!,
+                              child: Text(
+                                truncatedName,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      hint: const Text("Choose Bank"),
+                      onChanged: (String? value) {
+                        selectedBank = value;
+                        setState(() {});
+                        if (accountNumber.length == 10) {
+                          fetchDataFromApi();
+                        }
+                      },
+                      validator: (String? value) {
+                        return value == null ? "Choose item from list" : null;
+                      },
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -236,7 +278,7 @@ class _AyibTransferState extends State<AyibTransfer> {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
-                        handleAyibTransfer();
+                        handleBankTransfer();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
